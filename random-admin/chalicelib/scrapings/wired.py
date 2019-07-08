@@ -7,12 +7,13 @@ def scraping():
     html = requests.get('https://wired.jp')
     soup = BeautifulSoup(html.text, "html.parser")
     article = soup.find(class_="listed-article-norm")
-    
     title = article.h3.string
+    for i in ng_list:
+        if i in title:
+            return
     url = article.a.get("href")
     image = article.img.get("data-original")
     html = requests.get(url)
-    print(url)
     soup = BeautifulSoup(html.text, "html.parser")
     soup = soup.find(class_="article-detail")
     text = ''.join([s.text for s in soup.find_all('p')])

@@ -12,9 +12,8 @@ def cash_article():
         for site_name in site_name_list:    
             try:
                 article = eval("{}.scraping()".format(site_name))
+                print(article["site_name"])
             except:
-                continue
-            print(article["site_name"])
             regist_article(mysql,article["site_name"],article["article_url"],article["article_text"],article["article_title"],article["article_image"])    
         mysqlutil.commit()
 if __name__ == "__main__":

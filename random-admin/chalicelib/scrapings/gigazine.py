@@ -4,13 +4,16 @@ import random
 import re
 
 def scraping():
-    ng_list = ["gigazine","予告","開催中"]
+    ng_list = ["デジモン","gigazine","予告","開催中"]
     html = requests.get('https://gigazine.net/')
     soup = BeautifulSoup(html.text, "html.parser")
     article = soup.find("h2")
+    title = article.span.string
+    for i in ng_list:
+        if i in title:
+            return
     image = soup.find(class_="thumb")
     image = image.img.get("src")
-    title = article.span.string   
     url = article.a.get("href")
     html = requests.get(url)
     soup = BeautifulSoup(html.text, "html.parser")

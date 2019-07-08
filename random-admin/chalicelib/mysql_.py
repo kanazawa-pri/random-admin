@@ -14,9 +14,7 @@ class Mysql_():
                             ''',())]
 
     def fetch_user_history(self,user_id,is_later):
-        condition = ""
-        if is_later:
-            condition = "and is_later = 1"
+        condition = "and is_later = 1" if is_later else ""
         return [i["article_id"] for i in self.__mysqlutil.exec('''
                                         select article_id from user_article_history
                                         where user_id = %s
@@ -35,7 +33,9 @@ class Mysql_():
     def fetch_article_for_user(self,user_id,ng_site_name_list,ng_word_list):
         article_id_list = self.fetch_user_history(user_id,False)
         return list(self.__mysqlutil.exec('''
-                                            select article_id,site_name,article_url,article_title,article_image from articles
+                                            select article_id,site_name,article_url,article_title,article_image,red,blue,green from articles
+                                            INNER JOIN sites
+                                            USING(site_name)
                                             where updated_at > ( NOW( ) - INTERVAL 1 DAY )
                                             and article_id not in (%s)
                                              and site_name not in (%s)
@@ -64,5 +64,5 @@ if __name__ == "__main__":
     from dbutil import MysqlUtil
     with MysqlUtil() as mysqlutil:
         mysql = Mysql_(mysqlutil)
-        print(mysql.fetch_user_history(1,False))
+        print(mysql.fetch_article_for_user(1,["test"],["test"]))
         mysqlutil.commit()
