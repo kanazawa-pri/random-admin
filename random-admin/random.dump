@@ -1,0 +1,110 @@
+-- MySQL dump 10.13  Distrib 5.5.62, for Linux (x86_64)
+--
+-- Host: localhost    Database: random
+-- ------------------------------------------------------
+-- Server version	5.5.62
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `articles`
+--
+
+DROP TABLE IF EXISTS `articles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `articles` (
+  `article_id` int(11) NOT NULL,
+  `article_url` varchar(800) NOT NULL,
+  `site_name` varchar(30) NOT NULL,
+  `article_title` varchar(100) NOT NULL,
+  `article_image` varchar(100) DEFAULT NULL,
+  `top_words` varchar(50) NOT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `articles`
+--
+
+LOCK TABLES `articles` WRITE;
+/*!40000 ALTER TABLE `articles` DISABLE KEYS */;
+INSERT INTO `articles` VALUES (67758447,'https://gigazine.net/news/20190706-uno-flip/','gigazine','いつもの「UNO」から突然ダークサイドが始まる表裏一体カードの「UNO FLIP」を遊んでみた','https://i.gzn.jp/img/2019/07/06/uno-flip/00_m.jpg','サイド,フリップ,チャレンジ,手札,記号,登場','2019-07-06 07:51:01'),(93086082,'https://wired.jp/2019/07/06/jd-power-korean-cars-beat-us-europe-quality/','wired','米国の品質調査で韓国車がトップ3を独占、その理由はハイテク装備の“使い勝手”にあり？','https://wired.jp/wp-content/uploads/2019/07/Transpo_G70_TA-518126-520x292.jpg','クルマ,システム,インフォテインメント,自動,具合,品質,運転','2019-07-06 07:51:02'),(63086705,'https://gigazine.net/news/20190706-ready-or-not-trailer/','gigazine','幸せいっぱいの花嫁が命懸けのかくれんぼの中でサイコキラーと化していくブラックコメディ映画「READY OR NOT」予告編公開','https://i.gzn.jp/img/2019/07/06/ready-or-not-trailer/00_m.jpg','メイド,ドレス,クロス,家族,女性,新郎,花嫁','2019-07-06 09:20:00');
+/*!40000 ALTER TABLE `articles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sites`
+--
+
+DROP TABLE IF EXISTS `sites`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sites` (
+  `site_id` int(11) NOT NULL AUTO_INCREMENT,
+  `site_name` varchar(50) NOT NULL,
+  `site_url` varchar(100) NOT NULL,
+  `red` int(11) NOT NULL,
+  `green` int(11) NOT NULL,
+  `blue` int(11) NOT NULL,
+  `logo` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`site_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sites`
+--
+
+LOCK TABLES `sites` WRITE;
+/*!40000 ALTER TABLE `sites` DISABLE KEYS */;
+INSERT INTO `sites` VALUES (1,'gigazine','https://gigazine.net/',252,0,200,NULL),(2,'wired','https://wired.jp/',242,242,242,NULL);
+/*!40000 ALTER TABLE `sites` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_article_history`
+--
+
+DROP TABLE IF EXISTS `user_article_history`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_article_history` (
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  `article_id` int(11) NOT NULL DEFAULT '0',
+  `is_later` int(11) DEFAULT '0',
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`user_id`,`article_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_article_history`
+--
+
+LOCK TABLES `user_article_history` WRITE;
+/*!40000 ALTER TABLE `user_article_history` DISABLE KEYS */;
+INSERT INTO `user_article_history` VALUES (1,1,0,'2019-07-06 06:21:19'),(1,2,0,'2019-07-06 06:21:15'),(2,2,1,'2019-07-06 10:54:19'),(10,2,1,'2019-07-06 11:06:48'),(10,3,1,'2019-07-06 11:07:47'),(15,3,1,'2019-07-06 11:14:47');
+/*!40000 ALTER TABLE `user_article_history` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2019-07-08 23:17:23
