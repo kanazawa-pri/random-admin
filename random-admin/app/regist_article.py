@@ -11,12 +11,14 @@ def regist_article(mysql,site_name,article_url,text,article_title,article_image)
         for top_word in top_word_lists:
             if __is_similar(top_word_list,top_word.split(",")):
                 return 1
+        random.seed()
         return random.randint(1000000,99999999)
     if mysql.is_registed(article_url):
         print("すでに同じURLが登録されています")
         return
     top_word_list = extract_top_words(text)
     article_id = __grant_article_id(mysql,top_word_list)
+    print(article_id)
     if article_id == 1:
         ("同じ内容の記事がすでに登録されています。")
         return
