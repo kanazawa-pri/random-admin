@@ -4,7 +4,7 @@ import os
 os.environ['ROS_HOST'] = 'localhost'
 os.environ['ROS_PORT'] = '3306'
 os.environ['ROS_USER'] = 'root'
-os.environ['ROS_PASSWORD'] = 'your_password'
+os.environ['ROS_PASSWORD'] = ''
 os.environ['ROS_DB'] = 'random'
 os.environ['ROS_CHARSET'] = 'utf8mb4'
 
