@@ -7,7 +7,7 @@ import random
 def cash_article():
     with MysqlUtil() as mysqlutil:
         mysql = Mysql_(mysqlutil)
-        site_name_list = [i["site_name"] for i in mysql.fetch_sites()]
+        site_name_list = mysql.fetch_site_names()
         for site_name in site_name_list:    
             try:
                 article = eval("{}.scraping()".format(site_name))
