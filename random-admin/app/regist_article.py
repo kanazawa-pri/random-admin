@@ -6,10 +6,11 @@ def regist_article(mysql,site_name,article_url,text,article_title,article_image)
         top_word_list = top_word_list1 + top_word_list2
         return True if len(top_word_list) != len(set(top_word_list)) else False
 
-    def __grant_article_id(mysql,top_word_list):
+    def __grant_article_id(mysql,top_word_list,article_url,site_name,article_title,article_image):
         top_word_lists = mysql.fetch_top_words()
         for top_word in top_word_lists:
-            if __is_similar(top_word_list,top_word.split(",")):
+            if __is_similar(top_word_list,top_word["top_words"].split(",")):
+                mysql.update_attention_degree(top_word["article_id"],top_word_list,article_url,site_name,article_title,article_image)
                 return 1
         random.seed()
         return random.randint(1000000,99999999)
@@ -17,7 +18,7 @@ def regist_article(mysql,site_name,article_url,text,article_title,article_image)
         print("すでに同じURLが登録されています")
         return
     top_word_list = extract_top_words(text)
-    article_id = __grant_article_id(mysql,top_word_list)
+    article_id = __grant_article_id(mysql,top_word_list,article_url,site_name,article_title,article_image)
     print(article_id)
     if article_id == 1:
         ("同じ内容の記事がすでに登録されています。")

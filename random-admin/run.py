@@ -3,8 +3,6 @@ from app.dbutil import MysqlUtil
 from app.cash_article import cash_article
 import json
 from flask import Flask,request
-import schedule
-import time
 
 app = Flask(__name__)
 
