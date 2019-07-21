@@ -17,8 +17,13 @@ def scraping():
     url = article.a.get("href")
     html = requests.get(url)
     soup = BeautifulSoup(html.text, "html.parser")
+    reporter = ''
+    try:
+        reporter = soup.small.a.string
+    except:
+        print("reporter not found")
     text = ''.join([s.text for s in soup.find_all(class_="preface")])
-    return {'article_text':text,'article_title':title, 'article_url':url, 'site_name':'gigazine','article_image': image}
+    return {'article_text':text,'article_title':title, 'article_url':url,'article_reporter':reporter ,'site_name':'gigazine','article_image': image}
 
 if __name__ == "__main__":
     print(scraping())

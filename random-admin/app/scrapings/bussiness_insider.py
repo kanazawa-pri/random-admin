@@ -1,27 +1,30 @@
 from bs4 import BeautifulSoup
 import requests
 import random
+import re
 
-ng_list = []
-
-def scraping(ng_list):
-
+def scraping():
+    ng_list = ["bussiness insider"]
     html = requests.get('https://www.businessinsider.jp/')
     soup = BeautifulSoup(html.text, "html.parser")
-    soup = soup.find_all(class_="p-cardList-cardTitle")
-    cnt = 0
-    while cnt < 5:
-        article = random.choice(soup)
-        if any(s in article for s in ng_list):
-            cnt += 1
-            continue 
-        break
-    
-    url = 'https://www.businessinsider.jp' + article.a.get("href")
+    article = soup.find(class_="p-cardList")
+    title = article.find(class_="p-cardList-cardTitle").string
+    for i in ng_list:
+        if i in title:
+            return
+    image = soup.find(class_="p-cardList-cardImage")
+    image = image.img.get("src")
+    url = "https://www.businessinsider.jp/" + article.a.get("href")
     html = requests.get(url)
     soup = BeautifulSoup(html.text, "html.parser")
-    text = ''.join([s.text for s in soup.find_all(class_="p-post-content")])
-    return {'text':text, 'url':url}
+    reporter = ''
+    try:
+        reporter = soup.find(class_="p-post-bylineAuthor").text
+    except:
+        print("reporter not found")
+    main = soup.find(class_="p-post-content")
+    text = ''.join([s.text for s in main.find_all("p")])
+    return {'article_text':text,'article_title':title, 'article_url':url,'article_reporter':reporter.replace(' ［Business Insider Japan］ ','') ,'site_name':'bussiness_insider','article_image': image}
 
 if __name__ == "__main__":
-    print(scraping(['アニメ']))
+    print(scraping())

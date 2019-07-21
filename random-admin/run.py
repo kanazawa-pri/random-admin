@@ -31,6 +31,16 @@ def history():
             mysqlutil.commit()
             return json.dumps({'result':'ok'})
 
+@app.route('/reporter',methods=['POST'])
+def reporter():
+    with MysqlUtil() as mysqlutil:
+        mysql = Mysql_(mysqlutil)
+        if request.method == 'POST':
+            mysql.regist_user_fav_reporter(int(request.json["user_id"]),request.json["fav_reporters"])
+            mysqlutil.commit()
+            return json.dumps({'result':'ok'})
+
+    
 if __name__ == '__main__':
     app.debug = True 
     app.run(host='0.0.0.0')

@@ -15,9 +15,16 @@ def scraping():
     image = article.img.get("data-original")
     html = requests.get(url)
     soup = BeautifulSoup(html.text, "html.parser")
-    soup = soup.find(class_="article-detail")
-    text = ''.join([s.text for s in soup.find_all('p')])
-    return {'article_text':text,'article_title':title, 'article_url':url, 'site_name':'wired','article_image': image}
+    main = soup.find(class_="article-detail")
+    head = soup.find(class_="contents-main")
+    reporter = ''
+    try:
+        reporter = head.find(class_="post-credit").text
+        reporter = reporter.split("\r\n")[0]
+    except:
+        print("reporter not found")
+    text = ''.join([s.text for s in main.find_all('p')])
+    return {'article_text':text,'article_title':title, 'article_url':url,'article_reporter':reporter.replace("TEXT BY ", ""), 'site_name':'wired','article_image': image}
 
 if __name__ == "__main__":
     print(scraping())

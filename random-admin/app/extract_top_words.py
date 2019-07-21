@@ -20,12 +20,12 @@ def extract_top_words(text):
         for list_ in text_list:
             if list_[1] < cnt:
                 text_list.remove(list_)
-            if len(list_[0]) == 1:
+            elif len(list_[0]) == 1:
                 text_list.remove(list_)
         return [list_[0] for list_ in text_list]
 
     text = nagisa.extract(text, extract_postags=['名詞']).words
-    top_word_list =  __adjust_text(text, True, 3, 2) + __adjust_text(text, False, 4, 3)
+    top_word_list =  __adjust_text(text, True, 2, 2) + __adjust_text(text, False, 2, 3)
 
     return top_word_list
 
