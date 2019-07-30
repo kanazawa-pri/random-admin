@@ -13,8 +13,8 @@ def scraping():
         if i in title:
             return
     image = soup.find(class_="p-cardList-cardImage")
-    image = image.img.get("src")
-    url = "https://www.businessinsider.jp/" + article.a.get("href")
+    image = image.img.get("data-src")
+    url = "https://www.businessinsider.jp" + article.a.get("href")
     html = requests.get(url)
     soup = BeautifulSoup(html.text, "html.parser")
     reporter = ''

@@ -12,8 +12,9 @@ def scraping():
     for i in ng_list:
         if i in title:
             return
-    image = soup.find(class_="responsive-image responsive-image--16by9")
-    image = image.img.get("src")
+    image = article.find(class_="js-delayed-image-load")
+    print(image)
+    image = image.get("data-src")
     url = "https://www.bbc.com/" + article.a.get("href")
     html = requests.get(url)
     soup = BeautifulSoup(html.text, "html.parser")

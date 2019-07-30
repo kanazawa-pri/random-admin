@@ -24,19 +24,18 @@ def history():
     with MysqlUtil() as mysqlutil:
         mysql = Mysql_(mysqlutil)
         if request.method == 'GET':
-            print(request.args)
-            return json.dumps({'result':mysql.fetch_article_for_user(request.args.get('user_id'),int(request.args.get('page')),request.args.get('ng_sites'))})
+            return json.dumps({'result':mysql.fetch_article_for_user(request.args.get('user_id'),int(request.args.get('page')),request.args.get('user_ng_sites'))})
         elif request.method == 'POST':
             mysql.regist_user_history(int(request.json["user_id"]),int(request.json["article_id"]),int(request.json["is_later"]))
             mysqlutil.commit()
             return json.dumps({'result':'ok'})
 
-@app.route('/reporter',methods=['POST'])
+@app.route('/user',methods=['POST'])
 def reporter():
     with MysqlUtil() as mysqlutil:
         mysql = Mysql_(mysqlutil)
         if request.method == 'POST':
-            mysql.regist_user_fav_reporter(int(request.json["user_id"]),request.json["fav_reporters"])
+            mysql.update_user_info(int(request.json["user_id"]),request.json["user_fav_reporters"],request.json["user_ng_sites"])
             mysqlutil.commit()
             return json.dumps({'result':'ok'})
 

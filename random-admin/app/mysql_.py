@@ -11,7 +11,7 @@ class Mysql_():
     def fetch_top_words(self):
         return self.__mysqlutil.exec('''
                                 select article_id,top_words from articles
-                                where updated_at > ( NOW( ) - INTERVAL 1 DAY )
+                                where updated_at > ( NOW( ) - INTERVAL 8 HOUR )
                             ''', ())
 
     def fetch_article_for_user(self, user_id, page, ng_sites):
@@ -20,9 +20,9 @@ class Mysql_():
         recent_article_list = list(self.__mysqlutil.exec('''
                                             select article_id,site_name,article_reporter,article_url,article_title,article_image,red,blue,green,1 as is_later from articles a
                                             INNER JOIN sites USING(site_name)
-                                            where updated_at > ( NOW( ) - INTERVAL 1 DAY )
+                                            where updated_at > ( NOW( ) - INTERVAL 12 HOUR )
                                             and NOT EXISTS (SELECT article_id FROM user_article_history u WHERE user_id = %s and u.article_id = a.article_id and updated_at > ( NOW( ) - INTERVAL 1 DAY))
-                                            and sites.site_name not in ({})
+                                            and ((sites.site_name not in ({})) or (attention_degree > 1))
                                             ORDER BY attention_degree DESC, updated_at DESC
                                             limit %s,%s
 					'''.format(ng_sites),(user_id,start,end)))
@@ -32,7 +32,7 @@ class Mysql_():
                                     INNER JOIN sites USING(site_name)
                                     INNER JOIN (SELECT ht.article_id,ht.is_later from user_article_history ht WHERE ht.user_id = %s AND ht.is_later = 4 and ht.updated_at > ( NOW( ) - INTERVAL 12 HOUR)) as st2
                                     USING(article_id)
-                                    where sites.site_name not in ({})
+                                    where updated_at > ( NOW( ) - INTERVAL 12 HOUR )
                                     ORDER BY updated_at DESC
                 '''.format(ng_sites),(user_id)))
             if len(recent_article_list) > 1:
@@ -62,12 +62,12 @@ class Mysql_():
                             ''',(article_id,article_url,site_name,article_reporter,",".join(top_word_list),article_title,article_image))
         return
     
-    def regist_user_fav_reporter(self,user_id,user_fav_reporters):
+    def update_user_info(self,user_id,user_fav_reporters,user_ng_sites):
         self.__mysqlutil.exec('''
-                                INSERT INTO user_fav_reporters(user_id, user_fav_reporters) 
-                                VALUES(%s, %s)
-				                on duplicate key update user_fav_reporters=%s
-                            ''',(user_id,user_fav_reporters,user_fav_reporters))
+                                INSERT INTO users_info(user_id, user_fav_reporters,user_ng_sites) 
+                                VALUES(%s, %s, %s)
+				                on duplicate key update user_fav_reporters=%s,user_ng_sites=%s
+                            ''',(user_id,user_fav_reporters,user_ng_sites,user_fav_reporters,user_ng_sites))
         return
 
     def update_attention_degree(self,article_id,top_word_list,article_url,site_name,article_title,article_image):
